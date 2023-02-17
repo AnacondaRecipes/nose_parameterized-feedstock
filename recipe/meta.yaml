@@ -32,7 +32,8 @@ test:
 
 about:
   home: https://github.com/wolever/nose-parameterized
-  license: BSD 2-Clause
+  license: BSD-2-Clause
+  license_family: BSD
   summary: 'Parameterized testing with any Python test framework.'
 
 extra:
