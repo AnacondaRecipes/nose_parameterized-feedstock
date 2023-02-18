@@ -1,0 +1,53 @@
+Index: nose-parameterized-0.6.0/nose_parameterized/parameterized.py
+===================================================================
+--- nose-parameterized-0.6.0.orig/nose_parameterized/parameterized.py
++++ nose-parameterized-0.6.0/nose_parameterized/parameterized.py
+@@ -32,9 +32,9 @@ else:
+     new_instancemethod = new.instancemethod
+     from types import InstanceType
+     lzip = zip
+-    text_type = unicode
++    text_type = str
+     bytes_type = str
+-    string_types = basestring,
++    string_types = str,
+ 
+ _param = namedtuple("param", "args kwargs")
+ 
+@@ -323,7 +323,7 @@ class parameterized(object):
+     @classmethod
+     def input_as_callable(cls, input):
+         if callable(input):
+-            return lambda: cls.check_input_values(input())
++            return lambda: cls.check_input_values(eval(input()))
+         input_values = cls.check_input_values(input)
+         return lambda: input_values
+ 
+Index: nose-parameterized-0.6.0/nose_parameterized/test.py
+===================================================================
+--- nose-parameterized-0.6.0.orig/nose_parameterized/test.py
++++ nose-parameterized-0.6.0/nose_parameterized/test.py
+@@ -166,8 +166,8 @@ class TestParameterizedExpandDocstring(T
+ 
+     @parameterized.expand([param("foo")])
+     def test_unicode_docstring(self, foo):
+-        u"""Döcumentation."""
+-        self._assert_docstring(u"Döcumentation [with foo=%r]." %(foo, ))
++        """Döcumentation."""
++        self._assert_docstring("Döcumentation [with foo=%r]." %(foo, ))
+ 
+     @parameterized.expand([param("foo", )])
+     def test_default_values_get_correct_value(self, foo, bar=12):
+Index: nose-parameterized-0.6.0/setup.py
+===================================================================
+--- nose-parameterized-0.6.0.orig/setup.py
++++ nose-parameterized-0.6.0/setup.py
+@@ -8,7 +8,7 @@ from setuptools import setup, find_packa
+ os.chdir(os.path.dirname(sys.argv[0]) or ".")
+ 
+ try:
+-    long_description = open("README.rst", "U").read()
++    long_description = open("README.rst", "r").read()
+ except IOError:
+     long_description = "See https://github.com/wolever/parameterized"
+ 
